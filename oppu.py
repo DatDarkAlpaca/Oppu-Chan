@@ -1,76 +1,77 @@
 from random import choice
 import tkinter as tk
 
-
-# Loading Katakana:
-answers = {}
-with open('katakana.ans', mode='r', encoding='utf-8') as f:
-    for line in f.readlines():
-        letter, answer = line.split()
-        answers[letter] = answer
-
-# Current Question & Streak:
-current_question = choice(list(answers.keys()))
-streak = 0
-
-# Answer Command:
-correct_label, question, text_input, streak_label = [None] * 4
+from questions import load_questions
 
 
-def answer_command(event=None):
-    global answer, streak, streak_label, correct_label
+class Oppu(tk.Tk):
+    def __init__(self):
+        super(Oppu, self).__init__()
 
-    def change_question():
-        global current_question
-        current_question = choice(list(answers.keys()))
-        question.config(text=f"{current_question}")
+        # Setup:
+        self.title('Oppu-Chan')
+        self.geometry('240x240')
+        self._set_icon()
 
-    if text_input.get().upper() == answers[current_question]:
-        correct_label.config(text=f"Correct!", fg='#228B22')
-        streak += 1
-        streak_label.config(text=f"Streak: {streak}")
-        
-    else:
-        correct = answers[current_question].title()
-        correct_label.config(text=f"Incorrect... That was {correct}.",
-                             fg='#ff3232')
-       
-        streak = 0
-        streak_label.config(text=f"Streak: 0")
+        # Variables:
+        self.questions = load_questions('katakana.ans')
+        self.current_question = choice(list(self.questions.keys()))
+        self.streak = 0
 
-    correct_label.pack(side=tk.TOP, pady=1)
-    text_input.delete(0, tk.END)
-    change_question()
+        # Widgets:
+        self.streak_label, self.correct_label, self.question_label, self.answer_button, self.text_input = [None] * 5
+        self._create_widgets()
+
+    def answer_command(self, event=None):
+        if self.text_input.get().upper() == self.questions[self.current_question]:
+            self.correct_label.config(text=f"Correct!", fg='#228B22')
+
+            self.streak += 1
+            self.streak_label.config(text=f"Streak: {self.streak}")
+
+        else:
+            correct = self.questions[self.current_question].title()
+            self.correct_label.config(text=f"Incorrect... That was {correct}.",
+                                      fg='#ff3232')
+
+            self.streak = 0
+            self.streak_label.config(text=f"Streak: 0")
+
+        self.correct_label.pack(side=tk.TOP, pady=1)
+        self.text_input.delete(0, tk.END)
+
+        self.change_question()
+
+    def change_question(self):
+        self.current_question = choice(list(self.questions.keys()))
+        self.question_label.config(text=f"{self.current_question}")
+
+    # Helpers:
+    def _set_icon(self):
+        try:
+            self.iconbitmap('icon.ico')
+        except tk.TclError:
+            print(f"[Error]: The icon file could not be file within the project's directory.")
+
+    def _create_widgets(self):
+        self.streak_label = tk.Label(self, text=f"Streak: {self.streak}")
+        self.streak_label.pack(side=tk.TOP, pady=3)
+
+        self.correct_label = tk.Label(self)
+
+        self.question_label = tk.Label(self, text=f"{self.current_question}")
+        self.question_label.config(font=("Consolas", 32))
+        self.question_label.pack(pady=30)
+
+        self.answer_button = tk.Button(self, text="Answer", command=self.answer_command)
+        self.answer_button.pack(side=tk.BOTTOM, pady=5)
+
+        self.text_input = tk.Entry(self)
+        self.text_input.bind('<Return>', self.answer_command)
+        self.text_input.pack(side=tk.BOTTOM, pady=5)
+        self.text_input.focus()
 
 
-# GUI:
-root = tk.Tk()
-root.iconbitmap('icon.ico')
-root.geometry("240x240")
-root.title("Oppu-Chan")
-root.minsize(240, 240)
-
-# Streak Label:
-streak_label = tk.Label(root, text=f"Streak: {streak}")
-streak_label.pack(side=tk.TOP, pady=3)
-
-# Correct | Wrong Label:
-correct_label = tk.Label(root)
-
-# Question Label:
-question = tk.Label(root, text=f"{current_question}")
-question.config(font=("Consolas", 32))
-question.pack(pady=30)
-
-# Answer Button:
-answer_button = tk.Button(root, text="Answer", command=answer_command)
-answer_button.pack(side=tk.BOTTOM, pady=5)
-
-# Entry:
-text_input = tk.Entry(root)
-text_input.pack(side=tk.BOTTOM, pady=5)
-text_input.focus()
-text_input.bind('<Return>', answer_command)
-
-# Main:
-tk.mainloop()
+if __name__ == '__main__':
+    app = Oppu()
+    app.mainloop()
