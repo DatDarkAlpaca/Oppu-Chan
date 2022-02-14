@@ -14,7 +14,7 @@ class Oppu(tk.Tk):
         self._set_icon()
 
         # Variables:
-        self.questions = load_questions('katakana.ans')
+        self.questions = load_questions('questions/katakana.ans')
         self.current_question = choice(list(self.questions.keys()))
         self.streak = 0
 
