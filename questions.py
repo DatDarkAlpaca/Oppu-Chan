@@ -3,6 +3,6 @@ def load_questions(filepath):
     with open(filepath, mode='r', encoding='utf-8') as f:
         for line in f.readlines():
             letter, answer = line.split()
-            questions[letter] = answer
+            questions[letter] = answer.upper()
 
     return questions
