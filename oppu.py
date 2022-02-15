@@ -1,4 +1,5 @@
 from tkinter import filedialog as fd
+from itertools import product
 from random import choices
 from tkinter import ttk
 from os import getcwd
@@ -44,7 +45,11 @@ class Oppu(tk.Tk):
 
     # Button Commands:
     def answer_command(self, event=None):
-        answers = self.questions[self.current_question]
+        string_answer, answer = '', []
+        for character in self.current_question:
+            answer.append(self.questions[character])
+
+        answers = [''.join(x) for x in list(product(*answer))]
 
         if self.text_input.get().upper() in answers:
             self.correct_label.config(text=f"Correct!", foreground='#228B22')
@@ -53,7 +58,7 @@ class Oppu(tk.Tk):
             self.streak_label.config(text=f"Streak: {self.streak}")
 
         else:
-            self.correct_label.config(text=f"Incorrect... That was {answers[0].title()}.",
+            self.correct_label.config(text=f"Incorrect... That was {''.join(answers[0]).title()}.",
                                       foreground='#ff3232')
 
             self.streak = 0
