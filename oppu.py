@@ -13,6 +13,7 @@ class Oppu(tk.Tk):
         # Setup:
         self.title('Oppu-Chan')
         self.geometry('240x240')
+        self.minsize(240, 240)
         self._set_icon()
 
         # Menu Bar:
