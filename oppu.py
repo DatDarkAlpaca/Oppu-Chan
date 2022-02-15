@@ -1,5 +1,6 @@
 from tkinter import filedialog as fd
 from random import choice
+from tkinter import ttk
 from os import getcwd
 import tkinter as tk
 
@@ -15,6 +16,9 @@ class Oppu(tk.Tk):
         self.geometry('240x240')
         self.minsize(240, 240)
         self._set_icon()
+
+        # Style:
+        self.style = ttk.Style()
 
         # Menu Bar:
         self.menu_bar = tk.Menu(self)
@@ -34,6 +38,7 @@ class Oppu(tk.Tk):
 
         # Widgets:
         self.streak_label, self.correct_label, self.question_label, self.answer_button, self.text_input = [None] * 5
+        self.streak_separator = None
         self._create_widgets()
 
     # Button Commands:
@@ -77,19 +82,22 @@ class Oppu(tk.Tk):
             print(f"[Error]: The icon file could not be file within the project's directory.")
 
     def _create_widgets(self):
-        self.streak_label = tk.Label(self, text=f"Streak: {self.streak}")
+        self.streak_label = ttk.Label(self, text=f"Streak: {self.streak}")
         self.streak_label.pack(side=tk.TOP, pady=3)
 
-        self.correct_label = tk.Label(self)
+        self.streak_separator = tk.Frame(self, bg='#bababa', height=1, bd=0)
+        self.streak_separator.pack(fill='x')
 
-        self.question_label = tk.Label(self, text=f"{self.current_question}")
+        self.correct_label = ttk.Label(self)
+
+        self.question_label = ttk.Label(self, text=f"{self.current_question}")
         self.question_label.config(font=("Consolas", 32))
         self.question_label.pack(pady=30)
 
-        self.answer_button = tk.Button(self, text="Answer", command=self.answer_command)
+        self.answer_button = ttk.Button(self, text="Answer", command=self.answer_command)
         self.answer_button.pack(side=tk.BOTTOM, pady=5)
 
-        self.text_input = tk.Entry(self)
+        self.text_input = ttk.Entry(self)
         self.text_input.bind('<Return>', self.answer_command)
         self.text_input.pack(side=tk.BOTTOM, pady=5)
         self.text_input.focus()
