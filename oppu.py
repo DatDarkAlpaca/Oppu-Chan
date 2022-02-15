@@ -13,6 +13,7 @@ class Oppu(tk.Tk):
         super(Oppu, self).__init__()
 
         # Setup:
+        self.eval('tk::PlaceWindow . center')
         self.title('Oppu-Chan')
         self.geometry('240x240')
         self.minsize(240, 240)
@@ -83,8 +84,11 @@ class Oppu(tk.Tk):
 
     def select_difficulty(self):
         selector = tk.Toplevel()
-        selector.geometry("300x70")
+        selector.geometry("300x100")
+        selector.minsize(300, 100)
         selector.focus()
+
+        self.eval(f'tk::PlaceWindow {str(selector)} center')
 
         difficulty_label = ttk.Label(selector, text=f"{self.difficulty}")
 
@@ -101,7 +105,7 @@ class Oppu(tk.Tk):
 
         ok_button = ttk.Button(selector, text='Ok', command=on_ok)
 
-        scale.pack(fill='x')
+        scale.pack(fill='x', padx=10, pady=10)
         difficulty_label.pack()
         ok_button.pack()
 
