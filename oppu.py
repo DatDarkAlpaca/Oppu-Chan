@@ -44,16 +44,16 @@ class Oppu(tk.Tk):
 
     # Button Commands:
     def answer_command(self, event=None):
-        answer = ''.join([self.questions[x] for x in self.current_question])
+        answers = self.questions[self.current_question]
 
-        if self.text_input.get().upper() == answer:
+        if self.text_input.get().upper() in answers:
             self.correct_label.config(text=f"Correct!", foreground='#228B22')
 
             self.streak += self.difficulty
             self.streak_label.config(text=f"Streak: {self.streak}")
 
         else:
-            self.correct_label.config(text=f"Incorrect... That was {answer.title()}.",
+            self.correct_label.config(text=f"Incorrect... That was {answers[0].title()}.",
                                       foreground='#ff3232')
 
             self.streak = 0
