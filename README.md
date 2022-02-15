@@ -1,5 +1,5 @@
 # Oppu-Chan
-Oppu-Chan is a simple application for training katakana through repetition built with Tkinter.
+Oppu-Chan is a simple application for training katakana and hiragana through repetition built with Tkinter.
 
 ## Getting Started
 Since Oppu-Chan uses Tkinter, running this application is a breeze. Ensure that you're using the latest version of [Python](https://www.python.org/downloads/).
