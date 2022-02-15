@@ -3,8 +3,13 @@ from random import choice
 from tkinter import ttk
 from os import getcwd
 import tkinter as tk
+import webbrowser
 
 from questions import load_questions
+
+
+def open_url(url):
+    webbrowser.open_new_tab(url)
 
 
 class Oppu(tk.Tk):
@@ -24,9 +29,9 @@ class Oppu(tk.Tk):
         self.menu_bar = tk.Menu(self)
 
         self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
-        self.file_menu.add_command(label='Load', command=self.load_question)
+        self.file_menu.add_command(label='Open...', command=self.load_question)
         self.file_menu.add_separator()
-        self.file_menu.add_command(label='Exit', command=self.quit)
+        self.file_menu.add_command(label='Exit', command=self.quit, accelerator='Ctrl+E')
 
         self.menu_bar.add_cascade(label='File', menu=self.file_menu)
         self.config(menu=self.menu_bar)
@@ -101,6 +106,10 @@ class Oppu(tk.Tk):
         self.text_input.bind('<Return>', self.answer_command)
         self.text_input.pack(side=tk.BOTTOM, pady=5)
         self.text_input.focus()
+
+        self.question_label.bind('<Double-Button-1>',
+                                 lambda event: open_url(f"https://jisho.org/search/{self.current_question}"))
+        self.bind_all('<Control-e>', lambda event: self.quit())
 
 
 if __name__ == '__main__':
