@@ -10,8 +10,8 @@ from questions import load_questions
 
 
 class Oppu(ThemedTk):
-    def __init__(self, *args, **kwargs):
-        super(Oppu, self).__init__(*args, **kwargs)
+    def __init__(self):
+        ThemedTk.__init__(self, themebg=True, fonts=True)
 
         # Setup:
         self.eval('tk::PlaceWindow . center')
@@ -118,14 +118,13 @@ class Oppu(ThemedTk):
     def change_theme(self):
         self.light_theme() if self.dark_theme_enabled else self.dark_theme()
         self.dark_theme_enabled = not self.dark_theme_enabled
+        self.update()
 
     def dark_theme(self):
         self.set_theme('equilux')
-        self.configure(background='#464646')
 
     def light_theme(self):
-        self.set_theme('breeze')
-        self.configure(background='#eff0f1')
+        self.set_theme('plastik')
 
     # Helpers:
     def _set_icon(self):
