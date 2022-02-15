@@ -1,4 +1,5 @@
 from tkinter import filedialog as fd
+from ttkthemes import ThemedTk
 from itertools import product
 from random import choices
 from tkinter import ttk
@@ -8,9 +9,9 @@ import tkinter as tk
 from questions import load_questions
 
 
-class Oppu(tk.Tk):
-    def __init__(self):
-        super(Oppu, self).__init__()
+class Oppu(ThemedTk):
+    def __init__(self, *args, **kwargs):
+        super(Oppu, self).__init__(*args, **kwargs)
 
         # Setup:
         self.eval('tk::PlaceWindow . center')
@@ -19,15 +20,13 @@ class Oppu(tk.Tk):
         self.minsize(240, 240)
         self._set_icon()
 
-        # Style:
-        self.style = ttk.Style()
-
         # Menu Bar:
         self.menu_bar = tk.Menu(self)
 
         self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.file_menu.add_command(label='Open...', command=self.load_question, accelerator='Ctrl+O')
         self.file_menu.add_command(label='Difficulty', command=self.select_difficulty)
+        self.file_menu.add_command(label='Change Theme', command=self.change_theme)
         self.file_menu.add_separator()
         self.file_menu.add_command(label='Exit', command=self.quit, accelerator='Ctrl+E')
 
@@ -38,11 +37,15 @@ class Oppu(tk.Tk):
         self.questions = load_questions('questions/katakana.ans')
         self.current_question = ''.join(choices(list(self.questions.keys()), k=1))
         self.streak, self.difficulty = 0, 1
+        self.dark_theme_enabled = True
 
         # Widgets:
         self.streak_label, self.correct_label, self.question_label, self.answer_button, self.text_input = [None] * 5
         self.streak_separator = None
         self._create_widgets()
+
+        # Theme:
+        self.dark_theme()
 
     # Button Commands:
     def answer_command(self, event=None):
@@ -110,6 +113,19 @@ class Oppu(tk.Tk):
         ok_button.pack()
 
         self.difficulty = scale.get()
+
+    # Themes:
+    def change_theme(self):
+        self.light_theme() if self.dark_theme_enabled else self.dark_theme()
+        self.dark_theme_enabled = not self.dark_theme_enabled
+
+    def dark_theme(self):
+        self.set_theme('equilux')
+        self.configure(background='#464646')
+
+    def light_theme(self):
+        self.set_theme('breeze')
+        self.configure(background='#eff0f1')
 
     # Helpers:
     def _set_icon(self):
